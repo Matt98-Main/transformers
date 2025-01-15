@@ -906,10 +906,11 @@ class ModelTesterMixin:
                     model_batched_output[key] = model_batched_output[key][1:]
                     model_row_output[key] = model_row_output[key][1:]
                 try:
+                    # breakpoint()
                     recursive_check(model_batched_output[key], model_row_output[key], model_name, key)
                 except:
                     pass
-                    # breakpoint()
+                    breakpoint()
 
     def check_training_gradient_checkpointing(self, gradient_checkpointing_kwargs=None):
         if not self.model_tester.is_training:
