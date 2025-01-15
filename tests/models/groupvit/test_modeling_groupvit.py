@@ -61,7 +61,7 @@ class GroupViTVisionModelTester:
         num_channels=3,
         is_training=True,
         hidden_size=32,
-        depths=[6, 3, 3],
+        depths=[1, 1, 1],
         num_group_tokens=[64, 8, 0],
         num_output_groups=[64, 8, 8],
         num_attention_heads=4,

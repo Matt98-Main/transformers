@@ -887,14 +887,35 @@ class ModelTesterMixin:
                 # outputs1 = copy.deepcopy(model.encoder.layers[0].self_attn.outputs)
                 # model.encoder.layers[0].outputs = []
                 # model.encoder.layers[0].self_attn.outputs = []
+
+                # outputs1 = copy.deepcopy(model.vision_model.encoder.stages[0].outputs)
+                # outputs3 = copy.deepcopy(model.vision_model.encoder.stages[0].downsample.outputs)
+                # outputs5 = copy.deepcopy(model.vision_model.encoder.stages[0].downsample.assign.outputs)
+                # model.vision_model.encoder.stages[0].outputs = []
+                # model.vision_model.encoder.stages[0].downsample.outputs = []
+                # model.vision_model.encoder.stages[0].downsample.assign.outputs = []
+
                 # # breakpoint()
                 model_row_output = model(**single_row_input)
                 # outputs2 = copy.deepcopy(model.encoder.layers[0].outputs)
                 # outputs2 = copy.deepcopy(model.encoder.layers[0].self_attn.outputs)
                 # model.encoder.layers[0].outputs = []
                 # model.encoder.layers[0].self_attn.outputs = []
-                # #breakpoint()
-                # print(3)
+
+                # outputs2 = copy.deepcopy(model.vision_model.encoder.stages[0].outputs)
+                # outputs4 = copy.deepcopy(model.vision_model.encoder.stages[0].downsample.outputs)
+                # outputs6 = copy.deepcopy(model.vision_model.encoder.stages[0].downsample.assign.outputs)
+                # model.vision_model.encoder.stages[0].outputs = []
+                # model.vision_model.encoder.stages[0].downsample.outputs = []
+                # model.vision_model.encoder.stages[0].downsample.assign.outputs = []
+
+                # idx = -1
+                # if torch.amax(torch.abs(outputs1[idx][:1] - outputs2[idx])) > 1e-4:
+                #     breakpoint()
+                #     print(3)
+
+                #breakpoint()
+                print(3)
 
             if isinstance(model_batched_output, torch.Tensor):
                 model_batched_output = {"model_output": model_batched_output}
@@ -909,7 +930,7 @@ class ModelTesterMixin:
                     # breakpoint()
                     recursive_check(model_batched_output[key], model_row_output[key], model_name, key)
                 except:
-                    pass
+                    # pass
                     breakpoint()
 
     def check_training_gradient_checkpointing(self, gradient_checkpointing_kwargs=None):

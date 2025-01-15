@@ -174,6 +174,8 @@ class GroupViTAssignAttention(nn.Module):
         self.proj = nn.Linear(config.hidden_size, config.hidden_size)
         self.assign_eps = config.assign_eps
 
+        self.outputs = []
+
     def get_attn(self, attn, gumbel=True, hard=True):
         if gumbel and self.training:
             attn = gumbel_softmax(attn, dim=-2, hard=hard)
@@ -186,6 +188,10 @@ class GroupViTAssignAttention(nn.Module):
         return attn
 
     def forward(self, query, key):
+
+        self.outputs.append(query)
+        self.outputs.append(key)
+
         value = key
         # [batch_size, query_length, channels]
         query = self.q_proj(query)
@@ -196,17 +202,29 @@ class GroupViTAssignAttention(nn.Module):
         # [batch_size, key_length, channels]
         value = self.v_proj(value)
 
+        self.outputs.append(query)
+        self.outputs.append(key)
+        self.outputs.append(value)
+
         # [batch_size, query_length, key_length]
         raw_attn = (query @ key.transpose(-2, -1)) * self.scale
 
+        self.outputs.append(raw_attn)
+
         attn = self.get_attn(raw_attn)
+        self.outputs.append(attn)
+
         soft_attn = self.get_attn(raw_attn, gumbel=False, hard=False)
+        self.outputs.append(soft_attn)
 
         attn = attn / (attn.sum(dim=-1, keepdim=True) + self.assign_eps)
+        self.outputs.append(attn)
 
         out = attn @ value
+        self.outputs.append(out)
 
         out = self.proj(out)
+        self.outputs.append(out)
 
         return out, soft_attn
 
@@ -233,6 +251,8 @@ class GroupViTTokenAssign(nn.Module):
         self.norm_new_x = nn.LayerNorm(config.hidden_size, eps=config.layer_norm_eps)
         self.mlp_channels = GroupViTMLP(config, config.hidden_size, channels_dim, config.hidden_size)
 
+        self.outputs = []
+
     def project_group_token(self, group_tokens):
         """
         Args:
@@ -254,14 +274,22 @@ class GroupViTTokenAssign(nn.Module):
         """
 
         group_tokens = self.norm_tokens(group_tokens)
+        self.outputs.append(group_tokens)
         image_tokens = self.norm_x(image_tokens)
+        self.outputs.append(image_tokens)
         # [batch_size, num_output_groups, channels]
         projected_group_tokens = self.project_group_token(group_tokens)
+        self.outputs.append(projected_group_tokens)
         projected_group_tokens = self.pre_assign_attn(projected_group_tokens, image_tokens)
+        self.outputs.append(projected_group_tokens)
         new_image_tokens, attention = self.assign(projected_group_tokens, image_tokens)
-        new_image_tokens += projected_group_tokens
+        self.outputs.append(new_image_tokens)
+        self.outputs.append(attention)
+        new_image_tokens = new_image_tokens + projected_group_tokens
+        self.outputs.append(new_image_tokens)
 
         new_image_tokens = new_image_tokens + self.mlp_channels(self.norm_new_x(new_image_tokens))
+        self.outputs.append(new_image_tokens)
 
         return new_image_tokens, attention
 
@@ -496,6 +524,8 @@ class GroupViTStage(nn.Module):
         else:
             self.group_projector = None
 
+        self.outputs = []
+
     @property
     def with_group_token(self):
         return self.group_token is not None
@@ -526,6 +556,7 @@ class GroupViTStage(nn.Module):
             output_attentions (`bool`, *optional*):
                 Whether or not to return the grouping tensors of Grouping block.
         """
+
         if self.with_group_token:
             group_token = self.group_token.expand(hidden_states.size(0), -1, -1)
             if self.group_projector is not None:
@@ -534,19 +565,28 @@ class GroupViTStage(nn.Module):
             group_token = None
 
         x = hidden_states
+        self.outputs.append(x)
 
         cat_x = self.concat_x(x, group_token)
+        self.outputs.append(cat_x)
+
         for layer in self.layers:
             layer_out = layer(cat_x, attention_mask=None, causal_attention_mask=None)
+            self.outputs.append(layer_out)
             cat_x = layer_out[0]
+            self.outputs.append(cat_x)
 
         x, group_token = self.split_x(cat_x)
+        self.outputs.append(x)
+        self.outputs.append(group_token)
 
         attention = None
         if self.downsample is not None:
             x, attention = self.downsample(x, group_token)
 
+        self.outputs.append(x)
         outputs = (x, group_token)
+
         if output_attentions:
             outputs = outputs + (attention,)
 
