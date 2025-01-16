@@ -1,0 +1,29 @@
+# Fixed
+tests/models/autoformer/test_modeling_autoformer.py::AutoformerModelTest::test_batching_equivalence
+tests/models/bit/test_modeling_bit.py::BitModelTest::test_batching_equivalence
+tests/models/aria/test_modeling_aria.py::AriaForConditionalGenerationModelTest::test_batching_equivalence
+tests/models/dpt/test_modeling_dpt_hybrid.py::DPTModelTest::test_batching_equivalence
+FAILED tests/models/hiera/test_modeling_hiera.py::HieraModelTest::test_batching_equivalence - RuntimeError: "abs_cpu" not implemented for 'Bool'
+
+# Understand
+# use hard softmax and max()'s indices which is not stable
+tests/models/groupvit/test_modeling_groupvit.py::GroupViTVisionModelTest::test_batching_equivalence
+# the outputs of timm is generally larger
+tests/models/timm_backbone/test_modeling_timm_backbone.py::TimmBackboneModelTest::test_batching_equivalence
+
+
+# ???
+tests/models/esm/test_modeling_esmfold.py::EsmFoldModelTest::test_batching_equivalence
+
+
+# just wrong
+FAILED tests/models/dac/test_modeling_dac.py::DacModelTest::test_batching_equivalence - AssertionError: Tensor-likes are not close!
+
+
+
+
+
+
+
+
+

@@ -832,8 +832,8 @@ class ModelTesterMixin:
                 self.assertFalse(
                     torch.isinf(single_row_object).any(), f"Single row output has `inf` in {model_name} for key={key}"
                 )
-                a = torch.amax(torch.abs(batched_row))
-                b = torch.amax(torch.abs(single_row_object))
+                #a = torch.amax(torch.abs(batched_row))
+                #b = torch.amax(torch.abs(single_row_object))
                 # if torch.is_floating_point(a) and torch.is_floating_point(b):
                 #     # if a < 1e-9 or b < 1e-9:
                 #     #     breakpoint()
@@ -983,6 +983,7 @@ class ModelTesterMixin:
                 if hasattr(self, "zero_init_hidden_state") and "decoder_hidden_states" in key:
                     model_batched_output[key] = model_batched_output[key][1:]
                     model_row_output[key] = model_row_output[key][1:]
+                recursive_check(model_batched_output[key], model_row_output[key], model_name, key)
                 try:
                     # breakpoint()
                     recursive_check(model_batched_output[key], model_row_output[key], model_name, key)
