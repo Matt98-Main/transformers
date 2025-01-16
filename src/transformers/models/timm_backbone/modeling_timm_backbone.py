@@ -138,6 +138,7 @@ class TimmBackbone(PreTrainedModel, BackboneMixin):
 
         if output_hidden_states:
             # We modify the return layers to include all the stages of the backbone
+            
             self._backbone.return_layers = self._all_layers
             hidden_states = self._backbone(pixel_values, **kwargs)
             self._backbone.return_layers = self._return_layers

@@ -882,7 +882,9 @@ class ModelTesterMixin:
                     single_row_input[key] = value
 
             with torch.no_grad():
+                # breakpoint()
                 model_batched_output = model(**batched_input_prepared)
+                # breakpoint()
                 # outputs1 = copy.deepcopy(model.encoder.layers[0].outputs)
                 # outputs1 = copy.deepcopy(model.encoder.layers[0].self_attn.outputs)
                 # model.encoder.layers[0].outputs = []
@@ -918,6 +920,9 @@ class ModelTesterMixin:
                 #     model.embeddings.backbone.bit.encoder.stages[1].outputs = []
                 #     model.embeddings.backbone.bit.encoder.stages[2].outputs = []
                 #     model.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs = []
+
+                # outputs1 = model._backbone.outputs
+                # model._backbone.outputs = []
 
                 # # breakpoint()
                 model_row_output = model(**single_row_input)
@@ -961,6 +966,10 @@ class ModelTesterMixin:
                 # if torch.amax(torch.abs(outputs1[idx][:1] - outputs2[idx])) > 1e-4:
                 #     breakpoint()
                 #     print(3)
+
+                # outputs2 = model._backbone.outputs
+                # model._backbone.outputs = []
+                # breakpoint()
 
                 #breakpoint()
                 print(3)
