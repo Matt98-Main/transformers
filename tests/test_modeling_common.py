@@ -895,6 +895,30 @@ class ModelTesterMixin:
                 # model.vision_model.encoder.stages[0].downsample.outputs = []
                 # model.vision_model.encoder.stages[0].downsample.assign.outputs = []
 
+                # breakpoint()
+                # if hasattr(model, "dpt"):
+                #     outputs1 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.outputs)
+                #     outputs10 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.stages[0].outputs)
+                #     outputs11 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.stages[1].outputs)
+                #     outputs12 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.stages[2].outputs)
+                #     outputs100 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs)
+                #     model.dpt.embeddings.backbone.bit.encoder.outputs = []
+                #     model.dpt.embeddings.backbone.bit.encoder.stages[0].outputs = []
+                #     model.dpt.embeddings.backbone.bit.encoder.stages[1].outputs = []
+                #     model.dpt.embeddings.backbone.bit.encoder.stages[2].outputs = []
+                #     model.dpt.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs = []
+                # else:
+                #     outputs1 = copy.deepcopy(model.embeddings.backbone.bit.encoder.outputs)
+                #     outputs10 = copy.deepcopy(model.embeddings.backbone.bit.encoder.stages[0].outputs)
+                #     outputs11 = copy.deepcopy(model.embeddings.backbone.bit.encoder.stages[1].outputs)
+                #     outputs12 = copy.deepcopy(model.embeddings.backbone.bit.encoder.stages[2].outputs)
+                #     outputs100 = copy.deepcopy(model.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs)
+                #     model.embeddings.backbone.bit.encoder.outputs = []
+                #     model.embeddings.backbone.bit.encoder.stages[0].outputs = []
+                #     model.embeddings.backbone.bit.encoder.stages[1].outputs = []
+                #     model.embeddings.backbone.bit.encoder.stages[2].outputs = []
+                #     model.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs = []
+
                 # # breakpoint()
                 model_row_output = model(**single_row_input)
                 # outputs2 = copy.deepcopy(model.encoder.layers[0].outputs)
@@ -908,6 +932,30 @@ class ModelTesterMixin:
                 # model.vision_model.encoder.stages[0].outputs = []
                 # model.vision_model.encoder.stages[0].downsample.outputs = []
                 # model.vision_model.encoder.stages[0].downsample.assign.outputs = []
+
+
+                # if hasattr(model, "dpt"):
+                #     outputs2 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.outputs)
+                #     outputs20 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.stages[0].outputs)
+                #     outputs21 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.stages[1].outputs)
+                #     outputs22 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.stages[2].outputs)
+                #     outputs200 = copy.deepcopy(model.dpt.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs)
+                #     model.dpt.embeddings.backbone.bit.encoder.outputs = []
+                #     model.dpt.embeddings.backbone.bit.encoder.stages[0].outputs = []
+                #     model.dpt.embeddings.backbone.bit.encoder.stages[1].outputs = []
+                #     model.dpt.embeddings.backbone.bit.encoder.stages[2].outputs = []
+                #     model.dpt.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs = []
+                # else:
+                #     outputs2 = copy.deepcopy(model.embeddings.backbone.bit.encoder.outputs)
+                #     outputs20 = copy.deepcopy(model.embeddings.backbone.bit.encoder.stages[0].outputs)
+                #     outputs21 = copy.deepcopy(model.embeddings.backbone.bit.encoder.stages[1].outputs)
+                #     outputs22 = copy.deepcopy(model.embeddings.backbone.bit.encoder.stages[2].outputs)
+                #     outputs200 = copy.deepcopy(model.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs)
+                #     model.embeddings.backbone.bit.encoder.outputs = []
+                #     model.embeddings.backbone.bit.encoder.stages[0].outputs = []
+                #     model.embeddings.backbone.bit.encoder.stages[1].outputs = []
+                #     model.embeddings.backbone.bit.encoder.stages[2].outputs = []
+                #     model.embeddings.backbone.bit.encoder.stages[0].layers[0].outputs = []
 
                 # idx = -1
                 # if torch.amax(torch.abs(outputs1[idx][:1] - outputs2[idx])) > 1e-4:
